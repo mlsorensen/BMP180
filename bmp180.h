@@ -1,0 +1,40 @@
+/*
+  Copyright 2014 Marcus Sorensen <marcus@electron14.com>
+
+This program is licensed, please check with the copyright holder for terms
+*/
+#ifndef bmp180_h
+#define bmp180_h
+
+#if (ARDUINO >= 100)
+ #include "Arduino.h"
+#else
+ #include "WProgram.h"
+#endif
+
+#ifdef __AVR_ATtiny85__
+ #include "TinyWireM.h"
+ #define Wire TinyWireM
+#else
+ #include <avr/pgmspace.h>
+ #include <Wire.h>
+#endif
+
+class BMP180
+{
+  public:
+    BMP180();
+    int tempF();
+    int tempC();
+    long pressurePa();
+    long altitudeCm(long p);
+    long altitudeFt(long p);
+    bool begin(int os);
+  private:
+    void _calibrate();
+    int  _getInt(unsigned char regaddr);
+    unsigned int _getUInt(unsigned char regaddr);
+};
+
+#endif
+

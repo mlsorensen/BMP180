@@ -30,6 +30,7 @@ class BMP180
     long getAltitudeCentimeters(long p);
     long getAltitudeFeet(long p);
     bool begin(int os);
+    bool sensorExists();
   private:
     void _calibrate();
     int  _getInt(unsigned char regaddr);

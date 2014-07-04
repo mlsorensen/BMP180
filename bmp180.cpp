@@ -24,6 +24,7 @@ struct calibration {
 } _cdata;
 
 unsigned char _oversampling = 0;
+bool _bosch_exists = false;
 long b5;
 
 BMP180::BMP180() {
@@ -32,10 +33,18 @@ BMP180::BMP180() {
 // pass oversampling rate (0 lowest, 3 highest)
 bool BMP180::begin(int os) {
     Wire.begin();
-    _oversampling = os;
-    _calibrate();
+    Wire.beginTransmission(I2C_ADDR);
+    if (Wire.endTransmission() == 0) {
+        _oversampling = os;
+        _calibrate();
+        _bosch_exists = true;
+    }
+    return _bosch_exists;
 }
 
+bool BMP180::sensorExists() {
+    return _bosch_exists;
+}
 
 void BMP180::_calibrate() {
     _cdata.ac1 = _getInt(0xAA);
@@ -108,7 +117,7 @@ int BMP180::getCelsiusHundredths() {
     x2 = ((long)_cdata.mc << 11)/(x1 + _cdata.md);
     b5 = x1 + x2;
 
-  return ((b5 + 8) >> 4) * 10;
+    return ((b5 + 8)  >> 4) * 10;
 }
 
 //result in centimeters

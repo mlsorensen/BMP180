@@ -11,19 +11,19 @@ void setup() {
 
 void loop() {
   // F is shifted two decimal places to avoid float (centiFahrenheit?) unless needed
-  int tempF = bsensor.tempF();
+  int tempF = bsensor.getFahrenheitHundredths();
   
   // C is shifted one decimal to avoid float
-  int tempC  = bsensor.tempC();
+  int tempC  = bsensor.getCelsiusHundredths();
   
   // Pressure is in pascals
-  long pressurePascals = bsensor.pressurePa();
+  long pressurePascals = bsensor.getPressurePascals();
   
   // Altitude is shifted two decimals to avoid float (centiFeet?) unless needed
-  long altitudeFt = bsensor.altitudeFt(pressurePascals);
+  long altitudeFt = bsensor.getAltitudeFeet(pressurePascals);
   
   //centimeters
-  long altitudeCm = bsensor.altitudeCm(pressurePascals);
+  long altitudeCm = bsensor.getAltitudeCentimeters(pressurePascals);
 
   printf("The temperature is %.2f F\n", (float)tempF/100);
   printf("The temperature is %.1f C\n", (float)tempC/10);

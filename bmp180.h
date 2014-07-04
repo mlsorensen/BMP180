@@ -24,11 +24,11 @@ class BMP180
 {
   public:
     BMP180();
-    int tempF();
-    int tempC();
-    long pressurePa();
-    long altitudeCm(long p);
-    long altitudeFt(long p);
+    int getFahrenheitHundredths();
+    int getCelsiusHundredths();
+    long getPressurePascals();
+    long getAltitudeCentimeters(long p);
+    long getAltitudeFeet(long p);
     bool begin(int os);
   private:
     void _calibrate();

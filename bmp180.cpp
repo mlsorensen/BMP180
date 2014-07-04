@@ -86,14 +86,14 @@ unsigned int BMP180::_getUInt(unsigned char regaddr) {
     return ret;
 }
 
-//this is two decimals shifted, because tempC returns 1 and the 1.8 is changed to 18
-int BMP180::tempF() {
-    int temp = (tempC()* 18) + 3200;
+// Fahrenheit in hundredths of a degree
+int BMP180::getFahrenheitHundredths() {
+    int temp = (getCelsiusHundredths()* 1.8) + 3200;
     return temp;
 }
 
-//this result is one decimal shifted
-int BMP180::tempC() {
+// Celsius in hundredths of a degree
+int BMP180::getCelsiusHundredths() {
     // first, get uncompensated temperature
     Wire.beginTransmission(I2C_ADDR);
     Wire.write(0xF4);
@@ -108,25 +108,25 @@ int BMP180::tempC() {
     x2 = ((long)_cdata.mc << 11)/(x1 + _cdata.md);
     b5 = x1 + x2;
 
-  return ((b5 + 8) >> 4);
+  return ((b5 + 8) >> 4) * 10;
 }
 
 //result in centimeters
-long BMP180::altitudeCm(long p) {
+long BMP180::getAltitudeCentimeters(long p) {
     // see datacheet for this formula
     long ac = (float)4433000 * (1 - pow(((float) p/(float)101325), 0.190295));
     return ac;
 }
 
 // decimal shifted two places
-long BMP180::altitudeFt(long p) {
-    long a = altitudeCm(p);
+long BMP180::getAltitudeFeet(long p) {
+    long a = getAltitudeCentimeters(p);
     
     return a * 3.2808;
 }
 
 //refactor
-long BMP180::pressurePa() {
+long BMP180::getPressurePascals() {
     
     Wire.beginTransmission(I2C_ADDR);
     Wire.write(0xF4);
